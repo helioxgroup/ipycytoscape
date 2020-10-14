@@ -37,13 +37,12 @@ before_install:
 install:
   - |
     if [[ $GROUP == python ]]; then
-      pip install --upgrade ".[test]" -v
+      pip install --upgrade ".[test]"
     elif [[ $GROUP == js ]]; then
       pip install --upgrade ".[test]"
-      pip install --upgrade jupyterlab
-      jupyter labextension install @jupyter-widgets/jupyterlab-manager --no-build
+      pip install "jupyterlab==3.0.0rc4" "ipywidgets==8.0.0a0" "jupyterlab-widgets==1.0.0a5"
     elif [[ $GROUP == docs ]]; then
-      pip install --upgrade ".[test, examples, docs]" -v
+      pip install --upgrade ".[test, examples, docs]"
     fi
 before_script:
   # Set up a virtual screen for Firefox browser testing:
@@ -61,7 +60,6 @@ script:
       (exit $EXIT_STATUS)
     elif [[ $GROUP == js ]]; then
       npm run lint-check
-      jupyter lab build
       jupyter serverextension list 1>serverextensions 2>&1
       cat serverextensions | grep "jupyter-cytoscape.*OK"
       jupyter labextension list 1>labextensions 2>&1
